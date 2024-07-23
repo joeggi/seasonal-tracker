@@ -1,16 +1,17 @@
 from __future__ import print_function
 import requests
 import sys
-from flask import Flask, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/data')
+@app.route('/data', methods=['GET'])
 def get_mal_data():
     # Define the API endpoint URL
-    url = 'https://api.jikan.moe/v4/users/nickelkami/full'
+    username = request.args.get('query')
+    url = 'https://api.jikan.moe/v4/users/' + username + '/statistics'
 
     print("fetching api data", file=sys.stderr)
 
