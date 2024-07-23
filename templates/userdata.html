@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Data Display</title>
+    <script src="{{ url_for('static', filename='scripts/rendering.js') }}"></script>
+    <script src="https://unpkg.com/vue@3"></script>
+</head>
+
+<body>
+    <h1>MyAnimeList API Fetch</h1>
+    <div id="caption">
+        Here is some recent activity from {{ username }}:
+    </div>
+    <div id="data-summary">
+        Watched episode {{ entry0.increment }} of {{ entry0.entry.name }} on {{ entry0.date }} <br></li>
+        Watched episode {{ entry1.increment }} of {{ entry1.entry.name }} on {{ entry1.date }} <br></li>
+        Watched episode {{ entry2.increment }} of {{ entry2.entry.name }} on {{ entry2.date }} <br></li>
+    </div>
+</body>
+
+</html>
