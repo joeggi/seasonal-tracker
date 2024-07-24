@@ -1,12 +1,18 @@
-async function fetchData() {
-    const query = document.getElementById('query').value;
-    const response = await fetch('/data?query=${query}');
-    const data = await response.json();
+document.addEventListener('DOMContentLoaded', () => {
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
 
-    if (data.error) {
-        alert(data.error);
-        return;
-    }
+    // The current page and query are passed as data attributes
+    const currentPage = parseInt(prevButton.dataset.page);
+    const query = prevButton.dataset.query;
 
-    console.log(data);
-}
+    prevButton.addEventListener('click', function () {
+        if (currentPage > 1) {
+            window.location.href = `/data?query=${query}&page=${currentPage - 1}`;
+        }
+    });
+
+    nextButton.addEventListener('click', function () {
+        window.location.href = `/data?query=${query}&page=${currentPage + 1}`;
+    });
+})

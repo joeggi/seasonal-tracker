@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Data Display</title>
-    <script src="{{ url_for('static', filename='scripts/rendering.js') }}"></script>
+    <script src="/static/scripts/rendering.js"></script>
     <script src="https://unpkg.com/vue@3"></script>
 </head>
 
@@ -13,6 +13,7 @@
     <div id="data-container">
         Welcome, User!
     </div>
+    <div id="username"></div>
     <form action="/data">
         <label for="query">Username:</label>
         <input type="text" id="query" name="query" required>

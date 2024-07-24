@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Data Display</title>
-    <script src="{{ url_for('static', filename='scripts/rendering.js') }}"></script>
+    <script src="/static/scripts/rendering.js"></script>
     <script src="https://unpkg.com/vue@3"></script>
 </head>
 
@@ -14,10 +14,18 @@
         Here is some recent activity from {{ username }}:
     </div>
     <div id="data-summary">
-        Watched episode {{ entry0.increment }} of {{ entry0.entry.name }} on {{ entry0.date }} <br></li>
-        Watched episode {{ entry1.increment }} of {{ entry1.entry.name }} on {{ entry1.date }} <br></li>
-        Watched episode {{ entry2.increment }} of {{ entry2.entry.name }} on {{ entry2.date }} <br></li>
+        {% for index in data_slice['title'] %}
+        <div>
+            <h3>{{ data_slice['title'][index] }}</h3>
+            <p>Type: {{ data_slice['type'][index] }}</p>
+            <p>Increment: {{ data_slice['inc'][index] }}</p>
+            <p>Date: {{ data_slice['date'][index] }}</p>
+        </div>
+        {% endfor %}
     </div>
+    <button id="prevButton" data-page="{{ page }}" data-query="{{ request.args.get('query') }}">Previous</button>
+    <button id="nextButton" data-page="{{ page }}" data-query="{{ request.args.get('query') }}">Next</button><br>
+    <a href="/" class='btn btn-primary'>Return to search</a>
 </body>
 
 </html>
