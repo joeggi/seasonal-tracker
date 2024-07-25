@@ -8,14 +8,16 @@ from dateutil import parser
 app = Flask(__name__)
 CORS(app)
 
+# @app.route('/userupdates', methods=['GET'])
+
 @app.route('/data', methods=['GET'])
 def get_mal_data():
     username = request.args.get('query')
-    page = request.args.get('page', default=1, type=int)
-    start = (page - 1) * 5
-    end = start + 5
+    # page = request.args.get('page', default=1, type=int)
+    # start = (page - 1) * 5
+    # end = start + 3
     # Define the API endpoint URL
-    url = 'https://api.jikan.moe/v4/users/' + username + '/history'
+    url = 'https://api.jikan.moe/v4/users/' + username + '/userupdates'
 
     print(url, file=sys.stderr)
 
@@ -26,17 +28,15 @@ def get_mal_data():
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             posts = response.json()
-            data_slice = {'title': {}, 'type': {}, 'inc': {}, 'date': {}}
-            print(start)
-            print(end)
-            for i in range(start, end):
-                data_slice['title'][i] = posts['data'][i]['entry']['name']
-                data_slice['type'][i] = posts['data'][i]['entry']['type']
-                data_slice['inc'][i] = posts['data'][i]['increment']
-                data_slice['date'][i] = parser.parse(posts['data'][i]['date']).strftime('%A, %B %d, %Y at %I:%M %p')
-            print(data_slice, file=sys.stderr)
-            
-            return render_template('userdata.html', start=start, end=end, data_slice=data_slice, page=page)
+            data_slice = {'title': {}, 'eps_seen': {}, 'date': {}, 'status': {}, 'rating': {}}
+            for i in range(0, 3):
+                data_slice['status'][i] = posts['data']['anime'][i]['status']
+                data_slice['rating'][i] = 0
+                data_slice['title'][i] = posts['data']['anime'][i]['entry']['title']
+                data_slice['eps_seen'][i] = posts['data']['anime'][i]['episodes_seen']
+                data_slice['rating'][i] = posts['data']['anime'][i]['score']
+                data_slice['date'][i] = parser.parse(posts['data']['anime'][i]['date']).strftime('%A, %B %d, %Y at %I:%M %p')
+            return render_template('userdata.html', username=username, data_slice=data_slice)
         else:
             print('Error:', response.status_code)
             return None

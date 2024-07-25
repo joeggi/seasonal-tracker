@@ -15,12 +15,29 @@
     </div>
     <div id="data-summary">
         {% for index in data_slice['title'] %}
+        {% if data_slice['status'][index] == 'Completed' %}
         <div>
             <h3>{{ data_slice['title'][index] }}</h3>
-            <p>Type: {{ data_slice['type'][index] }}</p>
-            <p>Increment: {{ data_slice['inc'][index] }}</p>
-            <p>Date: {{ data_slice['date'][index] }}</p>
+            <p>Finished series {{ data_slice['title'][index] }} on {{ data_slice['date'][index] }} </p>
+            <p>Rated series {{ data_slice['rating'][index] }} / 10</p>
         </div>
+        {% elif data_slice['status'][index] == 'Plan to Watch' %}
+        <div>
+            <h3>{{ data_slice['title'][index] }}</h3>
+            <p>Added series {{ data_slice['title'][index] }} as planned to watch on {{ data_slice['date'][index] }} </p>
+        </div>
+        {% elif data_slice['eps_seen'][index] == None %}
+        <div>
+            <h3>{{ data_slice['title'][index] }}</h3>
+            <p>Watched an episode on {{ data_slice['date'][index] }}, series is of
+                unknown length </p>
+        </div>
+        {% elif data_slice['status'][index] == 'Watching' %}
+        <div>
+            <h3>{{ data_slice['title'][index] }}</h3>
+            <p>Watched episode {{ data_slice['eps_seen'][index] }} on {{ data_slice['date'][index] }} </p>
+        </div>
+        {% endif %}
         {% endfor %}
     </div>
     <button id="prevButton" data-page="{{ page }}" data-query="{{ request.args.get('query') }}">Previous</button>
