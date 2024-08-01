@@ -1,18 +1,42 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
+function fadeInPage() {
+    if (!window.AnimationEvent) {
+        return;
+    }
+    console.log("hi")
+    var fader = document.getElementById('fader-item');
+    fader.classList.add('fade-out');
+}
 
-    // The current page and query are passed as data attributes
-    const currentPage = parseInt(prevButton.dataset.page);
-    const query = prevButton.dataset.query;
-
-    prevButton.addEventListener('click', function () {
-        if (currentPage > 1) {
-            window.location.href = `/data?query=${query}&page=${currentPage - 1}`;
+document.addEventListener('DOMContentLoaded', function () {
+    if (!window.AnimationEvent) {
+        return;
+    }
+    var anchors = document.getElementsByTagName('a');
+    for (var idx = 0; idx < anchors.length; idx += 1) {
+        if (anchors[idx].hostname !== window.location.hostname ||
+            anchors[idx].pathname === window.location.pathname) {
+            continue;
         }
-    });
+        anchors[idx].addEventListener('click', function (event) {
+            var fader = document.getElementById('fader-item'),
+                anchor = event.currentTarget;
 
-    nextButton.addEventListener('click', function () {
-        window.location.href = `/data?query=${query}&page=${currentPage + 1}`;
-    });
-})
+            var listener = function () {
+                window.location = anchor.href;
+                fader.removeEventListener('animationend', listener);
+            };
+            fader.addEventListener('animationend', listener);
+
+            event.preventDefault();
+            fader.classList.add('fade-in');
+        });
+    }
+});
+
+window.addEventListener('pageshow', function (event) {
+    if (!event.persisted) {
+        return;
+    }
+    var fader = document.getElementById('fader-item');
+    fader.classList.remove('fade-in');
+});

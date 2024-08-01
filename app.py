@@ -1,7 +1,7 @@
 from __future__ import print_function
 import requests
 import sys
-from flask import Flask, request, jsonify, send_from_directory, render_template
+from flask import Flask, request, jsonify, send_from_directory, render_template, flash
 from flask_cors import CORS
 from dateutil import parser
 
@@ -28,6 +28,10 @@ def get_mal_data():
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             posts = response.json()
+
+            if len(posts['data']) == 0:
+                return render_template('index.html')
+
             data_slice = {'title': {}, 'eps_seen': {}, 'date': {}, 'status': {}, 'rating': {}}
             for i in range(0, 3):
                 data_slice['status'][i] = posts['data']['anime'][i]['status']

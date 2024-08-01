@@ -10,6 +10,10 @@
 </head>
 
 <body>
+    <svg id="fader-item"></svg>
+    <script>
+        fadeInPage();
+    </script>
     <h1>MyAnimeList API Fetch</h1>
     <div id="caption">
         Here is some recent activity from {{ username }}:
@@ -41,8 +45,6 @@
         {% endif %}
         {% endfor %}
     </div>
-    <button id="prevButton" data-page="{{ page }}" data-query="{{ request.args.get('query') }}">Previous</button>
-    <button id="nextButton" data-page="{{ page }}" data-query="{{ request.args.get('query') }}">Next</button><br>
     <a href="/" class='btn btn-primary'>Return to search</a>
 </body>
 
