@@ -58,16 +58,26 @@ def favorites():
         # Make a GET request to the API endpoint using requests.get()
         response = requests.get(url)
         caption = "Here are " + username + "'s favorites!"
-        print(response.json(), sys.stderr)
+
         if response.status_code == 200:
             posts = response.json()
 
             if len(posts['data']) == 0:
                 return render_template('index.html')
-            data_slice = {'title': {}, 'year': {}}
-            for i in range(0, len(posts['data']['anime'])):
+            
+            data_slice = {'title': {}, 'year': {}, 'char': {}}
+
+            for i in range(0, min(len(posts['data']['anime']), 10)):
                 data_slice['title'][i] = posts['data']['anime'][i]['title']
                 data_slice['year'][i] = posts['data']['anime'][i]['start_year']
+            for i in range(0, min(len(posts['data']['characters']), 10)):
+                data_slice['char'][i] = posts['data']['characters'][i]['name']
+
+
+            if len(posts['data']['anime']) == 0:
+                data_slice['title'][i] = "NA"
+            if len(posts['data']['characters']) == 0:
+                data_slice['char'][i] = username + " has no favorite characters.."
             return render_template('userdata.html', caption=caption, data_type='favorites', data_slice=data_slice, username=username)
         
     except requests.exceptions.RequestException as e:

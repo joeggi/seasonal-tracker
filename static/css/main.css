@@ -8,6 +8,10 @@ input[type="submit"] {
     margin: 0;
 }
 
+.row {
+    font-size: 1.5rem;
+}
+
 .bg-image {
     background-image: url('../images/ryouback.jpg');
     /* Add the blur effect */
@@ -21,6 +25,13 @@ input[type="submit"] {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+.charDisplay {
+    display: block;
+    position: relative;
+    width: 40%;
+    flex-direction: row;
 }
 
 #search-container {
@@ -38,7 +49,10 @@ input[type="submit"] {
     width: 40%;
     padding: 20px;
     text-align: center;
+}
 
+#data-summary {
+    padding: 25px;
 }
 
 .searchResult {
@@ -49,11 +63,11 @@ input[type="submit"] {
     border: 3px solid #f1f1f1;
     position: absolute;
     color: white;
-    top: 30%;
+    top: 45%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
-    width: 40%;
+    width: 60%;
     padding: 20px;
     text-align: center;
 }
