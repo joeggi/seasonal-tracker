@@ -10,7 +10,7 @@ CORS(app)
 
 # @app.route('/userupdates', methods=['GET'])
 
-@app.route('/data', methods=['GET'])
+@app.route('/activity', methods=['GET'])
 def get_mal_data():
     username = request.args.get('query')
     # page = request.args.get('page', default=1, type=int)
@@ -31,6 +31,7 @@ def get_mal_data():
 
             if len(posts['data']) == 0:
                 return render_template('index.html')
+            caption = "Here is some recent activity from " + username + ":"
 
             data_slice = {'title': {}, 'eps_seen': {}, 'date': {}, 'status': {}, 'rating': {}}
             for i in range(0, 3):
@@ -40,10 +41,34 @@ def get_mal_data():
                 data_slice['eps_seen'][i] = posts['data']['anime'][i]['episodes_seen']
                 data_slice['rating'][i] = posts['data']['anime'][i]['score']
                 data_slice['date'][i] = parser.parse(posts['data']['anime'][i]['date']).strftime('%A, %B %d, %Y at %I:%M %p')
-            return render_template('userdata.html', username=username, data_slice=data_slice)
+            return render_template('userdata.html', data_type='activity', username=username, data_slice=data_slice, caption=caption)
         else:
             print('Error:', response.status_code)
             return None
+        
+    except requests.exceptions.RequestException as e:
+        print('Error:', e)
+        return None
+    
+@app.route('/favorites')
+def favorites():
+    username = request.args.get('query')
+    url = "https://api.jikan.moe/v4/users/" + username + "/favorites"
+    try:
+        # Make a GET request to the API endpoint using requests.get()
+        response = requests.get(url)
+        caption = "Here are " + username + "'s favorites!"
+        print(response.json(), sys.stderr)
+        if response.status_code == 200:
+            posts = response.json()
+
+            if len(posts['data']) == 0:
+                return render_template('index.html')
+            data_slice = {'title': {}, 'year': {}}
+            for i in range(0, len(posts['data']['anime'])):
+                data_slice['title'][i] = posts['data']['anime'][i]['title']
+                data_slice['year'][i] = posts['data']['anime'][i]['start_year']
+            return render_template('userdata.html', caption=caption, data_type='favorites', data_slice=data_slice, username=username)
         
     except requests.exceptions.RequestException as e:
         print('Error:', e)

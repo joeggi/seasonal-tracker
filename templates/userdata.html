@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Data Display</title>
-    <script src="/static/scripts/rendering.js"></script>
+    <script src="/static/scripts/fader.js"></script>
     <link rel="stylesheet" type="text/css" href="../static/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 </head>
@@ -18,9 +18,10 @@
     <div class="searchResult">
         <h1>MyAnimeList API Fetch</h1>
         <div id="caption">
-            Here is some recent activity from {{ username }}:
+            {{caption}}
         </div>
         <div id="data-summary">
+            {% if data_type == 'activity' %}
             {% for index in data_slice['title'] %}
             {% if data_slice['status'][index] == 'Completed' %}
             <div>
@@ -47,6 +48,13 @@
             </div>
             {% endif %}
             {% endfor %}
+            {% elif data_type == 'favorites' %}
+            {% for index in data_slice['title'] %}
+            <div>
+                <h3>{{ data_slice['title'][index]}} ( {{data_slice['year'][index]}} )</h3>
+            </div>
+            {% endfor %}
+            {% endif %}
         </div>
         <a href="/" class='btn btn-primary'>Return to search</a>
     </div>
