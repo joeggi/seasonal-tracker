@@ -14,38 +14,42 @@
     <script>
         fadeInPage();
     </script>
-    <h1>MyAnimeList API Fetch</h1>
-    <div id="caption">
-        Here is some recent activity from {{ username }}:
+    <div class="bg-image"></div>
+    <div class="searchResult">
+        <h1>MyAnimeList API Fetch</h1>
+        <div id="caption">
+            Here is some recent activity from {{ username }}:
+        </div>
+        <div id="data-summary">
+            {% for index in data_slice['title'] %}
+            {% if data_slice['status'][index] == 'Completed' %}
+            <div>
+                <h3>{{ data_slice['title'][index] }}</h3>
+                <p>Finished series {{ data_slice['title'][index] }} on {{ data_slice['date'][index] }} </p>
+                <p>Rated series {{ data_slice['rating'][index] }} / 10</p>
+            </div>
+            {% elif data_slice['status'][index] == 'Plan to Watch' %}
+            <div>
+                <h3>{{ data_slice['title'][index] }}</h3>
+                <p>Added series {{ data_slice['title'][index] }} as planned to watch on {{ data_slice['date'][index] }}
+                </p>
+            </div>
+            {% elif data_slice['eps_seen'][index] == None %}
+            <div>
+                <h3>{{ data_slice['title'][index] }}</h3>
+                <p>Watched an episode on {{ data_slice['date'][index] }}, series is of
+                    unknown length </p>
+            </div>
+            {% elif data_slice['status'][index] == 'Watching' %}
+            <div>
+                <h3>{{ data_slice['title'][index] }}</h3>
+                <p>Watched episode {{ data_slice['eps_seen'][index] }} on {{ data_slice['date'][index] }} </p>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <a href="/" class='btn btn-primary'>Return to search</a>
     </div>
-    <div id="data-summary">
-        {% for index in data_slice['title'] %}
-        {% if data_slice['status'][index] == 'Completed' %}
-        <div>
-            <h3>{{ data_slice['title'][index] }}</h3>
-            <p>Finished series {{ data_slice['title'][index] }} on {{ data_slice['date'][index] }} </p>
-            <p>Rated series {{ data_slice['rating'][index] }} / 10</p>
-        </div>
-        {% elif data_slice['status'][index] == 'Plan to Watch' %}
-        <div>
-            <h3>{{ data_slice['title'][index] }}</h3>
-            <p>Added series {{ data_slice['title'][index] }} as planned to watch on {{ data_slice['date'][index] }} </p>
-        </div>
-        {% elif data_slice['eps_seen'][index] == None %}
-        <div>
-            <h3>{{ data_slice['title'][index] }}</h3>
-            <p>Watched an episode on {{ data_slice['date'][index] }}, series is of
-                unknown length </p>
-        </div>
-        {% elif data_slice['status'][index] == 'Watching' %}
-        <div>
-            <h3>{{ data_slice['title'][index] }}</h3>
-            <p>Watched episode {{ data_slice['eps_seen'][index] }} on {{ data_slice['date'][index] }} </p>
-        </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-    <a href="/" class='btn btn-primary'>Return to search</a>
 </body>
 
 </html>
