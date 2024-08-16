@@ -67,6 +67,16 @@ input[type="submit"]:focus {
     text-align: center;
 }
 
+.search-input {
+    font-size: 14px;
+    color: #ffffff;
+    margin-left: var(--padding);
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    background: transparent;
+}
+
 #data-summary {
     padding: 25px;
 }
