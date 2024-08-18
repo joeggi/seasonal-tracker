@@ -99,9 +99,11 @@ def favorites():
 
 
             if len(posts['data']['anime']) == 0:
-                data_slice['title'][i] = "NA"
+                data_slice['title'][0] = username + " has no favorite anime.."
+                data_slice['year'][0] = -1
             if len(posts['data']['characters']) == 0:
-                data_slice['char'][i] = username + " has no favorite characters.."
+                data_slice['char'][0] = username + " has no favorite characters.."
+            print(data_slice, sys.stderr)
             return render_template('userdata.html', caption=caption, data_type='favorites', data_slice=data_slice, username=username)
         
     except requests.exceptions.RequestException as e:

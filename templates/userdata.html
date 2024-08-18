@@ -33,13 +33,13 @@
             {% elif data_type == 'favorites' %}
             <div class="row">
                 <div class="col-sm-6">
-                    {% if data_slice['title'][0] == "NA" %}
-                    <p>{{ username }} has no favorite anime..</p>
-                    {% else %}
                     {% for index in data_slice['title'] %}
+                    {% if data_slice['year'][index] == -1 %}
+                    <p>{{ data_slice['title'][index]}}</p>
+                    {% else %}
                     <p>{{ data_slice['title'][index]}} ({{data_slice['year'][index]}})</p>
-                    {% endfor %}
                     {% endif %}
+                    {% endfor %}
                 </div>
                 <div class="col-sm-6">
                     {% for index in data_slice['char'] %}
