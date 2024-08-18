@@ -28,25 +28,44 @@
             {% if data_slice['status'][index] == 'Completed' %}
             <div>
                 <h3>{{ data_slice['title'][index] }}</h3>
-                <p>Finished series {{ data_slice['title'][index] }} on {{ data_slice['date'][index] }} </p>
-                <p>Rated series {{ data_slice['rating'][index] }} / 10</p>
+                <p>Finished series {{ data_slice['title'][index] }} on {{ data_slice['date'][index] }}, rated series a
+                    {{ data_slice['rating'][index] }}/10. </p>
             </div>
             {% elif data_slice['status'][index] == 'Plan to Watch' %}
             <div>
                 <h3>{{ data_slice['title'][index] }}</h3>
-                <p>Added series {{ data_slice['title'][index] }} as planned to watch on {{ data_slice['date'][index] }}
+                <p>Added series {{ data_slice['title'][index] }} as planned to watch on {{ data_slice['date'][index] }}.
                 </p>
             </div>
             {% elif data_slice['eps_seen'][index] == None %}
             <div>
                 <h3>{{ data_slice['title'][index] }}</h3>
                 <p>Watched an episode on {{ data_slice['date'][index] }}, series is of
-                    unknown length </p>
+                    unknown length. </p>
             </div>
             {% elif data_slice['status'][index] == 'Watching' %}
             <div>
                 <h3>{{ data_slice['title'][index] }}</h3>
-                <p>Watched episode {{ data_slice['eps_seen'][index] }} on {{ data_slice['date'][index] }} </p>
+                <p>Watched episode {{ data_slice['eps_seen'][index] }} on {{ data_slice['date'][index] }}. </p>
+            </div>
+            {% elif data_slice['status'][index] == 'Re-watching' %}
+            <div>
+                <h3>{{ data_slice['title'][index] }}</h3>
+                <p>Rewatched up through episode {{ data_slice['eps_seen'][index] }} on {{ data_slice['date'][index] }}.
+                    {{ username }} scored
+                    this show a {{ data_slice['rating'][index]}}. </p>
+            </div>
+            {% elif data_slice['status'][index] == 'On-Hold' %}
+            <div>
+                <h3>{{ data_slice['title'][index] }}</h3>
+                <p>Placed series on hold on {{ data_slice['date'][index] }} after watching through episode {{
+                    data_slice['eps_seen'][index] }}. </p>
+            </div>
+            {% elif data_slice['status'][index] == 'Dropped' %}
+            <div>
+                <h3>{{ data_slice['title'][index] }}</h3>
+                <p>Dropped series on {{ data_slice['date'][index] }} after watching through episode {{
+                    data_slice['eps_seen'][index] }}. </p>
             </div>
             {% endif %}
             {% endfor %}

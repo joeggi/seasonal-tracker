@@ -28,6 +28,7 @@ def get_mal_data():
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             posts = response.json()
+            print(posts, file=sys.stderr)
 
             if len(posts['data']) == 0:
                 return render_template('index.html')
@@ -41,6 +42,7 @@ def get_mal_data():
                 data_slice['eps_seen'][i] = posts['data']['anime'][i]['episodes_seen']
                 data_slice['rating'][i] = posts['data']['anime'][i]['score']
                 data_slice['date'][i] = parser.parse(posts['data']['anime'][i]['date']).strftime('%A, %B %d, %Y at %I:%M %p')
+
             return render_template('userdata.html', data_type='activity', username=username, data_slice=data_slice, caption=caption)
         else:
             print('Error:', response.status_code)
@@ -61,6 +63,7 @@ def favorites():
 
         if response.status_code == 200:
             posts = response.json()
+            print(posts, file=sys.stderr)
 
             if len(posts['data']) == 0:
                 return render_template('index.html')

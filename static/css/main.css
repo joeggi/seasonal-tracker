@@ -71,7 +71,7 @@ input[type="submit"]:focus {
     font-size: 14px;
     color: #ffffff;
     margin-left: var(--padding);
-    border-radius: 12px;
+    border-radius: 6px;
     outline: none;
     border: none;
     background: transparent;
