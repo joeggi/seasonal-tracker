@@ -34,7 +34,7 @@ def get_mal_data():
                 return render_template('index.html')
             caption = "Here is some recent activity from " + username + ":"
 
-            data_slice = {'title': {}, 'eps_seen': {}, 'date': {}, 'status': {}, 'rating': {}}
+            data_slice = {'title': {}, 'eps_seen': {}, 'date': {}, 'status': {}, 'rating': {}, 'message': {}}
             for i in range(0, 3):
                 data_slice['status'][i] = posts['data']['anime'][i]['status']
                 data_slice['rating'][i] = 0
@@ -42,7 +42,28 @@ def get_mal_data():
                 data_slice['eps_seen'][i] = posts['data']['anime'][i]['episodes_seen']
                 data_slice['rating'][i] = posts['data']['anime'][i]['score']
                 data_slice['date'][i] = parser.parse(posts['data']['anime'][i]['date']).strftime('%A, %B %d, %Y at %I:%M %p')
-
+                match posts['data']['anime'][i]['status']:
+                    case 'Completed':
+                        data_slice['message'][i] = ('Finished series ' + data_slice['title'][i] + ' on ' + data_slice['date'][i] + 
+                            ' , rated series a ' + str(data_slice['rating'][i]) + '/10.')
+                    case 'Plan to Watch':
+                        data_slice['message'][i] = ('Added series ' + data_slice['title'][i] + ' as planned to watch on ' + data_slice['date'][i] + '.')
+                    case 'Watching':
+                        if data_slice['eps_seen'][i] == None:
+                            data_slice['message'][i] = ('Watched an episode on ' + data_slice['date'][i] + 
+                                ', series is of unknown length.')
+                        else:
+                            data_slice['message'][i] = ('Watched episode ' + str(data_slice['eps_seen'][i]) + ' on ' + data_slice['date'][i] + '.')
+                    case 'Re-watching':
+                        data_slice['message'][i] = ('Rewatched up through episode ' + str(data_slice['eps_seen'][i]) + ' on ' + data_slice['date'][i] + 
+                            '. ' + username + ' rated series a ' + str(data_slice['rating'][i]) + '/10.')
+                    case 'On-Hold':
+                        data_slice['message'][i] = ('Placed series on hold on ' + data_slice['date'][i] + 
+                            ' after watching through episode ' + str(data_slice['eps_seen'][i]) + '.')
+                    case 'Dropped':
+                        data_slice['message'][i] = ('Dropped series on ' + data_slice['date'][i] + 
+                            ' after watching through episode ' + str(data_slice['eps_seen'][i]) + '.')
+            
             return render_template('userdata.html', data_type='activity', username=username, data_slice=data_slice, caption=caption)
         else:
             print('Error:', response.status_code)
