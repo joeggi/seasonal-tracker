@@ -18,6 +18,7 @@ def get_mal_data():
     # end = start + 3
     # Define the API endpoint URL
     url = 'https://api.jikan.moe/v4/users/' + username + '/userupdates'
+    user_profile = getUserId(username)
 
     print(url, file=sys.stderr)
 
@@ -28,7 +29,7 @@ def get_mal_data():
         # Check if the request was successful (status code 200)
         if response.status_code == 200:
             posts = response.json()
-            print(posts, file=sys.stderr)
+            print(user_profile, file=sys.stderr)
 
             if len(posts['data']) == 0:
                 return render_template('index.html')
@@ -64,7 +65,7 @@ def get_mal_data():
                         data_slice['message'][i] = ('Dropped series on ' + data_slice['date'][i] + 
                             ' after watching through episode ' + str(data_slice['eps_seen'][i]) + '.')
             
-            return render_template('userdata.html', data_type='activity', username=username, data_slice=data_slice, caption=caption)
+            return render_template('userdata.html', data_type='activity', username=username, data_slice=data_slice, caption=caption, user_profile=user_profile)
         else:
             print('Error:', response.status_code)
             return None
@@ -77,6 +78,8 @@ def get_mal_data():
 def favorites():
     username = request.args.get('query')
     url = "https://api.jikan.moe/v4/users/" + username + "/favorites"
+    user_profile = getUserId(username)
+
     try:
         # Make a GET request to the API endpoint using requests.get()
         response = requests.get(url)
@@ -104,11 +107,23 @@ def favorites():
             if len(posts['data']['characters']) == 0:
                 data_slice['char'][0] = username + " has no favorite characters.."
             print(data_slice, sys.stderr)
-            return render_template('userdata.html', caption=caption, data_type='favorites', data_slice=data_slice, username=username)
+            return render_template('userdata.html', caption=caption, data_type='favorites', data_slice=data_slice, username=username, user_profile=user_profile)
         
     except requests.exceptions.RequestException as e:
         print('Error:', e)
         return None
+    
+def getUserId(username):
+    response = requests.get('https://api.jikan.moe/v4/users/' + username)
+    if response.status_code == 200:
+        posts = response.json()
+        url = 'https://api.jikan.moe/v4/users/userbyid/' + str(posts['data']['mal_id'])
+
+        response2 = requests.get(url)
+        if response2.status_code == 200:
+            posts2 = response.json()
+            return posts2['data']['url']
+
     
 @app.route('/next-button')
 def next():
